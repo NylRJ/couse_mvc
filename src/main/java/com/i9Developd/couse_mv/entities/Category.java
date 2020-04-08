@@ -1,41 +1,39 @@
 package com.i9Developd.couse_mv.entities;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "tb_payment")
-public class Payment implements Serializable {
+@Table(name = "tb_category")
+public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Instant moment;
+	private String name;
 	
 	@JsonIgnore
-	@OneToOne
-	@MapsId
-	private Order order;
+	@ManyToMany(mappedBy = "categories")
+	private Set<Product> products = new HashSet<>();
 	
-	public Payment() {
+	public Category() {
 	}
 
-	public Payment(Long id, Instant moment, Order order) {
+	public Category(Long id, String name) {
 		super();
 		this.id = id;
-		this.moment = moment;
-		this.order = order;
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -46,22 +44,18 @@ public class Payment implements Serializable {
 		this.id = id;
 	}
 
-	public Instant getMoment() {
-		return moment;
+	public String getName() {
+		return name;
 	}
 
-	public void setMoment(Instant moment) {
-		this.moment = moment;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Order getOrder() {
-		return order;
+	public Set<Product> getProducts() {
+		return products;
 	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,7 +72,7 @@ public class Payment implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Payment other = (Payment) obj;
+		Category other = (Category) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
